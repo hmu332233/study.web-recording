@@ -22,11 +22,11 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
 
 function setPreview(mediaStream) {
 	// MediaStream을 HTMLVideoElement의 source 설정
-	videoOutput.srcObject = mediaStream;
+	videoPreview.srcObject = mediaStream;
 	// metadata가 로드될 때 실행되는 이벤트
-	videoOutput.onloadedmetadata = function() {
+	videoPreview.onloadedmetadata = function() {
 		// HTMLVideoElement로 카메라의 화면을 출력하기 시작
-		videoOutput.play();
+		videoPreview.play();
 	};
 }
 
@@ -56,17 +56,14 @@ function setRecorder(stream) {
 		// url 사용 완료 이후에는 revokeObjectURL을 호출해줘야함 (메모리 누수 방지)
 
 		// audio 예제
-		// const blob = new Blob(recordedChunks);
-		// const url = window.URL.createObjectURL(blob);
-		// const audio = document.querySelector('audio');
-		// audio.src = url;
 
 		// video 예제
-		const blob = new Blob(recordedChunks, { 'type': 'video/mp4' });
-    const url = window.URL.createObjectURL(blob);
-		videoPreview.src = url;
+		showRecordedVideo(recordedChunks);
 
-    console.log(url);
+		console.log(url);
+
+		// download 예제
+		// downloadVideo(recordedChunks);
 	});
 
 	// 녹화 시작, 녹화 종료 핸들러 등록
@@ -76,4 +73,42 @@ function setRecorder(stream) {
 	finishBtn.onclick = () => {
 		mediaRecorder.stop();
 	};
+}
+
+// audio 예제
+function playAudio(recordedChunks) {
+	const blob = new Blob(recordedChunks);
+	const url = window.URL.createObjectURL(blob);
+	const audio = document.querySelector('audio');
+	audio.src = url;
+}
+
+// video 예제
+function showRecordedVideo(recordedChunks) {
+	const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+	const url = window.URL.createObjectURL(blob);
+	videoOutput.src = url;
+}
+
+// 파일 다운로드 예제
+function downloadVideo(recordedChunks) {
+	let blob = new Blob(recordedChunks);
+
+	let aElm = document.createElement('a');
+	aElm.href = URL.createObjectURL(blob);
+	aElm.download = 'audio.webm';
+	aElm.click();
+}
+
+// 파일 업로드 예제
+function uploadVideo(recordedChunks) {
+	const blob = new Blob(recordedChunks);
+
+	const formdata = new FormData();
+	formdata.append('fname', 'audio.webm');
+	formdata.append('data', blob);
+
+	const xhr = new XMLHttpRequest();
+	xhr.open('POST', '/upload', false);
+	xhr.send(formdata);
 }
