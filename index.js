@@ -42,7 +42,7 @@ function setRecorder(stream) {
 	};
 	const mediaRecorder = new MediaRecorder(stream, options);
 
-	// 2. 전달받는 데이터를 처리하는 이벤트 핸들러 등록
+	// 전달받는 데이터를 처리하는 이벤트 핸들러 등록
 	// 매번 데이터가 준비될 때 마다 dataavailable 이벤트가 발생
 	const recordedChunks = [];
 	mediaRecorder.addEventListener('dataavailable', function(e) {
@@ -51,19 +51,20 @@ function setRecorder(stream) {
 		}
 	});
 
+  // record가 끝났을 때 이벤트 핸들러 등록
+	// 여기서 그동안 쌓인 chunk 데이터를 가지고 처리를 해준다
 	mediaRecorder.addEventListener('stop', function() {
-		// 생성된 Blob을 매개변수로 URL.createObjectURL 메서드를 호출하면 URL 생성
-		// url 사용 완료 이후에는 revokeObjectURL을 호출해줘야함 (메모리 누수 방지)
-
 		// audio 예제
+    // playAudio(recordedChunks);
 
 		// video 예제
-		showRecordedVideo(recordedChunks);
-
-		console.log(url);
+		playVideo(recordedChunks);
 
 		// download 예제
 		// downloadVideo(recordedChunks);
+
+    // upload 예제
+    // uploadVideo(recordedChunks);
 	});
 
 	// 녹화 시작, 녹화 종료 핸들러 등록
@@ -75,6 +76,10 @@ function setRecorder(stream) {
 	};
 }
 
+
+// 생성된 Blob을 매개변수로 URL.createObjectURL 메서드를 호출하면 URL 생성
+// url 사용 완료 이후에는 revokeObjectURL을 호출해줘야함 (메모리 누수 방지)
+
 // audio 예제
 function playAudio(recordedChunks) {
 	const blob = new Blob(recordedChunks);
@@ -84,7 +89,7 @@ function playAudio(recordedChunks) {
 }
 
 // video 예제
-function showRecordedVideo(recordedChunks) {
+function playVideo(recordedChunks) {
 	const blob = new Blob(recordedChunks, { type: 'video/mp4' });
 	const url = window.URL.createObjectURL(blob);
 	videoOutput.src = url;
@@ -92,11 +97,11 @@ function showRecordedVideo(recordedChunks) {
 
 // 파일 다운로드 예제
 function downloadVideo(recordedChunks) {
-	let blob = new Blob(recordedChunks);
+	const blob = new Blob(recordedChunks);
 
-	let aElm = document.createElement('a');
+	const aElm = document.createElement('a');
 	aElm.href = URL.createObjectURL(blob);
-	aElm.download = 'audio.webm';
+	aElm.download = 'audio.webm'; // 다운로드 받을 파일명
 	aElm.click();
 }
 
