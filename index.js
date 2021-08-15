@@ -1,3 +1,4 @@
+const permissionBtn = document.getElementById('permission-btn');
 const videoPreview = document.getElementById('video-preview');
 const videoOutput = document.getElementById('video-output');
 const startBtn = document.getElementById('start-btn');
@@ -7,21 +8,24 @@ let mediaStream = null;
 let mediaRecorder = null;
 let recordedMediaUrl = null;
 
-// 1. mediaStream 얻기 (카메라, 스크린 등등)
-const constraints = { audio: false, video: true };
-// 카메라 mediaStream 얻기
-// navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
-// 스크린 mediaStream 얻기
-navigator.mediaDevices.getDisplayMedia(constraints).then(function(mediaStream) {
-	// 비디오 트랙을 포함한 MediaStream
-	console.log(mediaStream);
+permissionBtn.addEventListener('click', function () {
+	// 1. mediaStream 얻기 (카메라, 스크린 등등)
+	const constraints = { audio: false, video: true };
+	// 카메라 mediaStream 얻기
+	// navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+	// 스크린 mediaStream 얻기
+	navigator.mediaDevices.getDisplayMedia(constraints).then(function(mediaStream) {
+		// 비디오 트랙을 포함한 MediaStream
+		console.log(mediaStream);
 
-	// 2. mediaStream을 HTMLVideoElement를 통해서 실시간으로 출력
-	setPreview(mediaStream);
+		// 2. mediaStream을 HTMLVideoElement를 통해서 실시간으로 출력
+		setPreview(mediaStream);
 
-	// MediaStream을 통해 Record 이벤트 등록
-	setRecorder(mediaStream);
+		// MediaStream을 통해 Record 이벤트 등록
+		setRecorder(mediaStream);
+	});
 });
+
 
 function setPreview(mediaStream) {
 	// MediaStream을 HTMLVideoElement의 source 설정
