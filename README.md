@@ -1,6 +1,9 @@
 # study.web-recording
 
-Recording Process
+mediaStream(카메라, 스크린)을 얻은 후 이를 녹화하는 예제  
+오디오, 비디오, 다운로드, 파일 업로드 예제 코드 있음
+
+### Recording Process
 1. media data의 source 생성 (MediaStream or HTMLMediaElement)
 2. MediaRecorder 객체 생성 (source와 option 인수 전달)
 3. MediaRecorder.ondataavailable 이벤트 핸들러 등록

@@ -7,13 +7,16 @@ let mediaStream = null;
 let mediaRecorder = null;
 let recordedMediaUrl = null;
 
-// 1. 카메라로 부터 입력 받기
+// 1. mediaStream 얻기 (카메라, 스크린 등등)
 const constraints = { audio: false, video: true };
-navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+// 카메라 mediaStream 얻기
+// navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+// 스크린 mediaStream 얻기
+navigator.mediaDevices.getDisplayMedia(constraints).then(function(mediaStream) {
 	// 비디오 트랙을 포함한 MediaStream
 	console.log(mediaStream);
 
-	// 2. 카메라로 받은 입력을 HTMLVideoElement를 통해서 실시간으로 출력
+	// 2. mediaStream을 HTMLVideoElement를 통해서 실시간으로 출력
 	setPreview(mediaStream);
 
 	// MediaStream을 통해 Record 이벤트 등록
